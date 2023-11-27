@@ -29,7 +29,6 @@ async def add_msg(request: Request):
     sender_id = data["sender_id"]
     receiver_id = data["receiver_id"]
     msg = data["msg"]
-
     
     conn = sqlite3.connect('my_database.db')
     cursor = conn.cursor()
@@ -37,11 +36,54 @@ async def add_msg(request: Request):
     timestamp = datetime.now()
 
     try:
-        cursor.execute('INSERT INTO msg (sender, receiver, msg, timestamp) VALUES (?, ?)', (sender_id, receiver_id, msg, timestamp))
-    except:
-        pass
+        cursor.execute('INSERT INTO message (sender, receiver, msg, timestamp) VALUES (?, ?, ?, ?)', (sender_id, receiver_id, msg, timestamp))
+    except Exception as e:
+        if hasattr(e, "message"):
+            print(e.messages)
+        else:
+            print(e)
 
-    # Commit the changes and close the connection
     conn.commit()
     conn.close()
+
+@app.get("/get_msg_usr/")
+async def get_messages_by_user(request: Request):
+    data = await request.json()
+    receiver_id = data["user_id"]
+    
+    conn = sqlite3.connect('my_database.db')
+    cursor = conn.cursor()
+
+    timestamp = datetime.now()
+
+    try:
+        cursor.execute('SELECT * FROM message WHERE receiver = ?', (receiver_id,))
+        message = cursor.fetchall()
+
+        return {"messages": message}
+    except:
+        return {"error": "receiver not found"}
+    finally:
+        conn.close()
+
+
+@app.get("/get_usr_id/")
+async def get_usr_id(request: Request):
+    data = await request.json()
+    username = data["username"]
+    
+    conn = sqlite3.connect('my_database.db')
+    cursor = conn.cursor()
+
+    timestamp = datetime.now()
+
+    try:
+        cursor.execute('SELECT id FROM user WHERE name = ?', (username,))
+        message = cursor.fetchall()
+
+        return {"messages": message}
+    except:
+        return {"error": "receiver not found"}
+    finally:
+        conn.close()
 

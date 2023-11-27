@@ -10,6 +10,7 @@ def create():
     cursor = conn.cursor()
 
     cursor.execute('DROP TABLE IF EXISTS user')
+    cursor.execute('DROP TABLE IF EXISTS message')
     cursor.execute('DROP TABLE IF EXISTS msg')
 
     # Create the 'user' table
@@ -23,7 +24,7 @@ def create():
 
     # Create the 'msg' table
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS msg (
+        CREATE TABLE IF NOT EXISTS message (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sender INTEGER NOT NULL,
             receiver INTEGER NOT NULL,
