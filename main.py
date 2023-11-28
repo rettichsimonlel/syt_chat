@@ -87,3 +87,18 @@ async def get_usr_id(request: Request):
     finally:
         conn.close()
 
+@app.get("/get_usrs/")
+def get_usrs():
+    conn = sqlite3.connect('my_database.db')
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('SELECT id, name FROM user')
+        message = cursor.fetchall()
+
+        return {"messages": message}
+    except:
+        return {"error": "receiver not found"}
+    finally:
+        conn.close()
+
