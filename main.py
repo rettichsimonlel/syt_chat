@@ -57,7 +57,7 @@ async def get_messages_by_user(request: Request):
     timestamp = datetime.now()
 
     try:
-        cursor.execute('SELECT * FROM message WHERE receiver = ?', (receiver_id,))
+        cursor.execute('SELECT * FROM message WHERE sender = ? OR receiver = ?', (receiver_id,receiver_id))
         message = cursor.fetchall()
 
         return {"messages": message}
