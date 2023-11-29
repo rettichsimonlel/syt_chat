@@ -1,36 +1,86 @@
-import curses
-
 from APIHandler import APIHandler
-from typing import List
 from getpass import getpass
+from time import sleep
+from ChatApp import ChatApp, ManageApp
 
-def login() -> [str, str]:
-    username = input("username: ")
-    password = getpass("password: ")
-    return [username, password]
+import threading
+
+def update(apihandler, app, receiver, sender, running):
+    sleep(1)
+    while running[0]:
+        messages = apihandler.getMessages()
+        filtered = []
+
+        for i in messages:
+            if(str(i[1]) == str(receiver)) or str(i[2]) == str(receiver):
+                filtered.append(i)
+
+        text = []
+        for i in filtered:
+            if str(i[2]) == str(receiver) and str(sender) == str(i[1]):
+                text.append(f"You   : {i[3]}")
+            elif str(i[1]) == str(receiver) and str(sender) == str(i[2]):
+                text.append(f"Other : {i[3]}")
+
+
+        if running[0]:
+            app.set_read_box("\n".join(text))
+        sleep(1)
 
 def main():
+    username = input("username: ")
+    password = getpass("password: ")
+
     apihandler = APIHandler("http://172.31.180.14:8000")
-    apihandler2 = APIHandler("http://172.31.180.14:8000")
+#    apihandler = APIHandler("http://localhost:8000")
+    apihandler.login([username, password])
+    first = True
 
-#    [username, password] = login()
-    credentials = ["testUser", "Kennwort1"]
-    credentials2 = ["testUser2", "Kennwort1"]
+    user_id = apihandler.getUserId()
+    if user_id == None:
+        apihandler.addUser()
+        user_id = apihandler.getUserId()
 
-    apihandler.login(credentials)
-    apihandler2.login(credentials2)
+    App = ChatApp("Chat", apihandler.addMessage)
+#    manageApp = ManageApp("Chat", apihandler.addMessage)
+    user_input = ""
+    while user_input != "q":
+        fancy_users = []
+        users = apihandler.getUsers()
+        user_ids = []
+        for user in users:
+            fancy_users.append(f"{user[0]}: {user[1]}")
+            user_ids.append(str(user[0]))
+        print("\n".join(fancy_users))
 
-#    apihandler.addUser()
-#    apihandler2.addUser()
+        user_input = input("Select userID or q to quit: ")
 
-#    user2id = apihandler.getUserId("testUser2")
-    apihandler2.getUserId()
-#    apihandler.getUserId()
+        if user_input in user_ids and user_input != "q":
+            appname = ""
+            receiver = user_input
+            apihandler.setReceiver(receiver)
+            for user in users:
+                if str(user[0]) == str(receiver):
+                    appname = user[1]
 
-#    print(apihandler.addMessage(user2id, "Hello World"))
+            run_app(apihandler, user_id, receiver, App, first)
+#            run_app(apihandler, user_id, receiver, manageApp, first)
+            first = False
 
-    print(apihandler2.getMessages())
+def run_app(apihandler, user_id, receiver, App, first):
+    running = [False]
 
+    update_thread = threading.Thread(target=update, kwargs={"apihandler": apihandler, "receiver": receiver, "app": App, "sender": user_id, "running": running})
+    update_thread.start()
+
+    running[0] = True
+
+    if first:
+        App.run()
+    else:
+        App.main()
+
+    running[0] = False
 
 if __name__ == "__main__":
     main()

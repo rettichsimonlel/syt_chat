@@ -10,6 +10,9 @@ class APIHandler:
         self.username = credentials[0]
         self.password = credentials[1]
 
+    def setReceiver(self, receiver):
+        self.receiver = receiver
+
     def getUserId(self, username=None):
         setUserId = False
         if username is None:
@@ -20,23 +23,28 @@ class APIHandler:
                 "username": username
                 }
 
-        data = requests.get(self.host+"/get_usr_id/", json=request).json()["messages"]
+        data = requests.get(self.host+"/get_usr_id/", json=request).json()
 
-        data = data[0][0]
+        data = data["messages"]
+
+        if data != []:
+            data = data[0][0]
+        else:
+            return None
 
         if setUserId:
             self.userid = data
 
         return data
 
-    def addMessage(self, receiver_id, message: str):
+    def addMessage(self, message: str, receiver_id=None):
+        if receiver_id is None:
+            receiver_id = self.receiver
         request = {
                 "sender_id": self.userid,
                 "receiver_id": receiver_id,
                 "msg": message
                 }
-
-        print(request)
 
         return requests.post(self.host+"/add_msg/", json=request)
 
@@ -45,9 +53,8 @@ class APIHandler:
                 "user_id": self.userid
                 }
 
-        print(request)
         data = requests.get(self.host+"/get_msg_usr/", json=request).json()
-        return data
+        return data["messages"]
 
     def addUser(self):
         request = {
@@ -56,4 +63,10 @@ class APIHandler:
         }
 
         return requests.post(self.host+"/add_user/", json=request)
+
+
+    def getUsers(self):
+        response = requests.get(self.host+"/get_usrs/").json()["messages"]
+
+        return response
 
