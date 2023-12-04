@@ -6,33 +6,15 @@ import threading
 from time import sleep
 
 
-class ManageApp():
-    def __init__(self, appname, on_press):
-        self.app = ChatApp(appname, on_press)
-
-        self.form_running = False
-        self.STARTING_FORM = self.app.F
-        super().__init__()
-
-    def run(self):
-        self.form_running = True
-        self.app.run()
-        self.form_running = False
-
-    def on_start(self):
-        self.form_running = True
-        return super().on_start()
-
-    def onCleanExit(self):
-        self.form_running = False
-        return super().onCleanExit()
-
-
 class ChatApp(npyscreen.NPSApp):
     def __init__(self, appname, on_press) -> None:
         self.appname = appname
         self.to_call = on_press
         self.form_running = False
+
+    def set_app_name(self, appname):
+        self.appname = appname
+        self.F.name= appname
 
     def main(self):
         self.F  = npyscreen.Form(name = self.appname)
@@ -60,11 +42,13 @@ class ChatApp(npyscreen.NPSApp):
                                  rely=-6)
 
         self.F.edit()
+        self.read_box_lines = 35
         del(self)
 
     def set_read_box(self, text):
         self.read_box.value = text
         self.read_box.update()
+        self.read_box.display()
         self.F.display()
 
     def on_press(self, widget):
@@ -73,6 +57,7 @@ class ChatApp(npyscreen.NPSApp):
         message = ""
         message = self.write_box.value
         self.write_box.value = ""
+        self.write_box.edit_cell = (-10, 0)
         self.write_box.update
         self.F.display()
         self.to_call(message)
@@ -80,12 +65,4 @@ class ChatApp(npyscreen.NPSApp):
 def update(app):
     sleep(3)
     app.set_read_box("new Text")
-    
-if __name__ == "__main__":
-    App = ChatApp("Hello World")
-
-    app_thread = threading.Thread(target=update, kwargs={"app": App})
-    app_thread.start()
-
-    App.main()
     

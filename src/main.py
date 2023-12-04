@@ -1,7 +1,7 @@
 from APIHandler import APIHandler
 from getpass import getpass
 from time import sleep
-from ChatApp import ChatApp, ManageApp
+from ChatApp import ChatApp
 
 import threading
 
@@ -17,14 +17,18 @@ def update(apihandler, app, receiver, sender, running):
 
         text = []
         for i in filtered:
-            if str(i[2]) == str(receiver) and str(sender) == str(i[1]):
-                text.append(f"You   : {i[3]}")
-            elif str(i[1]) == str(receiver) and str(sender) == str(i[2]):
-                text.append(f"Other : {i[3]}")
+            for msg in i[3].split("\n"):
+                if str(i[2]) == str(receiver) and str(sender) == str(i[1]):
+                    text.append(f"You   : {msg}")
+                elif str(i[1]) == str(receiver) and str(sender) == str(i[2]):
+                    text.append(f"Other : {msg}")
 
+
+        text = text[-35:]
+        text = "\n".join(text)
 
         if running[0]:
-            app.set_read_box("\n".join(text))
+            app.set_read_box(text)
         sleep(1)
 
 def main():
@@ -32,7 +36,7 @@ def main():
     password = getpass("password: ")
 
     apihandler = APIHandler("http://172.31.180.14:8000")
-#    apihandler = APIHandler("http://localhost:8000")
+    apihandler = APIHandler("http://localhost:8000")
     apihandler.login([username, password])
     first = True
 
@@ -41,10 +45,8 @@ def main():
         apihandler.addUser()
         user_id = apihandler.getUserId()
 
-    App = ChatApp("Chat", apihandler.addMessage)
-#    manageApp = ManageApp("Chat", apihandler.addMessage)
     user_input = ""
-    while user_input != "q":
+    while user_input != "q" and first:
         fancy_users = []
         users = apihandler.getUsers()
         user_ids = []
@@ -58,17 +60,19 @@ def main():
         if user_input in user_ids and user_input != "q":
             appname = ""
             receiver = user_input
-            apihandler.setReceiver(receiver)
             for user in users:
                 if str(user[0]) == str(receiver):
                     appname = user[1]
 
-            run_app(apihandler, user_id, receiver, App, first)
-#            run_app(apihandler, user_id, receiver, manageApp, first)
+            apihandler.setReceiver(receiver)
+
+            run_app(apihandler, user_id, receiver, first, appname)
             first = False
 
-def run_app(apihandler, user_id, receiver, App, first):
+def run_app(apihandler, user_id, receiver, first, appname):
     running = [False]
+
+    App = ChatApp(appname, apihandler.addMessage)
 
     update_thread = threading.Thread(target=update, kwargs={"apihandler": apihandler, "receiver": receiver, "app": App, "sender": user_id, "running": running})
     update_thread.start()
