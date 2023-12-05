@@ -5,6 +5,7 @@ from ChatApp import ChatApp
 
 import threading
 
+
 def update(apihandler, app, receiver, sender, running):
     sleep(1)
     while running[0]:
@@ -32,12 +33,16 @@ def update(apihandler, app, receiver, sender, running):
         sleep(1)
 
 def main():
-    username = input("username: ")
-    password = getpass("password: ")
-
+    auth = False
     apihandler = APIHandler("http://172.31.180.14:8000")
-    apihandler = APIHandler("http://localhost:8000")
-    apihandler.login([username, password])
+#    apihandler = APIHandler("http://localhost:8000")
+
+    while not auth:
+        username = input("username: ")
+        password = getpass("password: ")
+        apihandler.login([username, password])
+        auth = apihandler.getToken()
+        
     first = True
 
     user_id = apihandler.getUserId()
@@ -72,7 +77,13 @@ def main():
 def run_app(apihandler, user_id, receiver, first, appname):
     running = [False]
 
-    App = ChatApp(appname, apihandler.addMessage)
+    ACTIONS = {
+        "put": apihandler.postFile,
+#        "get": App.getFile,
+    }
+
+    App = ChatApp(appname, apihandler.addMessage, ACTIONS)
+
 
     update_thread = threading.Thread(target=update, kwargs={"apihandler": apihandler, "receiver": receiver, "app": App, "sender": user_id, "running": running})
     update_thread.start()
