@@ -7,12 +7,16 @@ from typing import List
 class APIHandler:
     def __init__(self, host) -> None:
         self.host = host
+<<<<<<< HEAD
         self.token = None
 
     def getPost(self, link, json, files=None):
         if files is None:
             return requests.post(self.host+link, json=json)
         return requests.post(self.host+link, json=json, files=files)
+=======
+        self.Token = None
+>>>>>>> 66400b8 (update client)
 
     def login(self, credentials: List[str]):
         self.username = credentials[0]
@@ -49,6 +53,10 @@ class APIHandler:
 
         response = requests.post(self.host+"/post_file/", request, files=files)
         
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 66400b8 (update client)
     def getUserId(self, username=None):
         setUserId = False
         if username is None:
@@ -79,6 +87,10 @@ class APIHandler:
             receiver_id = self.receiver
         request = {
                 "token": self.token,
+<<<<<<< HEAD
+=======
+                "sender_id": self.userid,
+>>>>>>> 66400b8 (update client)
                 "receiver_id": receiver_id,
                 "msg": message
                 }
@@ -88,11 +100,28 @@ class APIHandler:
     def getMessages(self):
         request = {
                 "token": self.token,
+<<<<<<< HEAD
+=======
+                "user_id": self.userid
+>>>>>>> 66400b8 (update client)
                 }
 
         data = requests.get(self.host+"/get_msg_usr/", json=request).json()
         return data["messages"]
 
+<<<<<<< HEAD
+=======
+    def addUser(self):
+        request = {
+            "token": self.token,
+            "username": self.username,
+            "password": self.password,
+        }
+
+        return requests.post(self.host+"/add_user/", json=request)
+
+
+>>>>>>> 66400b8 (update client)
     def getUsers(self):
         response = requests.get(self.host+"/get_usrs/").json()["messages"]
 
