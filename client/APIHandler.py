@@ -8,6 +8,7 @@ class APIHandler:
     def __init__(self, host) -> None:
         self.host = host
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.token = None
 
     def getPost(self, link, json, files=None):
@@ -17,6 +18,9 @@ class APIHandler:
 =======
         self.Token = None
 >>>>>>> 66400b8 (update client)
+=======
+        self.Token = None
+>>>>>>> 4b3c9bf (update client)
 
     def login(self, credentials: List[str]):
         self.username = credentials[0]
@@ -54,9 +58,13 @@ class APIHandler:
         response = requests.post(self.host+"/post_file/", request, files=files)
         
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         
 >>>>>>> 66400b8 (update client)
+=======
+        
+>>>>>>> 4b3c9bf (update client)
     def getUserId(self, username=None):
         setUserId = False
         if username is None:
@@ -88,7 +96,10 @@ class APIHandler:
         request = {
                 "token": self.token,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 4b3c9bf (update client)
                 "sender_id": self.userid,
 >>>>>>> 66400b8 (update client)
                 "receiver_id": receiver_id,
@@ -101,7 +112,10 @@ class APIHandler:
         request = {
                 "token": self.token,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 4b3c9bf (update client)
                 "user_id": self.userid
 >>>>>>> 66400b8 (update client)
                 }
