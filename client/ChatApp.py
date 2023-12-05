@@ -13,11 +13,19 @@ class ChatApp(npyscreen.NPSApp):
         self.actions = actions
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+=======
+>>>>>>> 76a8396 (update client)
+<<<<<<< HEAD
 
 =======
 >>>>>>> 66400b8 (update client)
+<<<<<<< HEAD
 =======
 >>>>>>> 4b3c9bf (update client)
+=======
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)
         self.form_running = False
 
     def set_app_name(self, appname):
@@ -84,9 +92,19 @@ class ChatApp(npyscreen.NPSApp):
         self.F.display()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 66400b8 (update client)
 =======
 
 >>>>>>> 4b3c9bf (update client)
+=======
+
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> 66400b8 (update client)
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)

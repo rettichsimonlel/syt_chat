@@ -11,7 +11,10 @@ def main():
     apihandler = APIHandler("http://localhost:8000")
 =======
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 76a8396 (update client)
 def update(apihandler, app, receiver, sender, running):
     sleep(1)
     while running[0]:
@@ -43,6 +46,7 @@ def main():
     apihandler = APIHandler("http://172.31.180.14:8000")
 #    apihandler = APIHandler("http://localhost:8000")
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
     while not auth:
@@ -53,6 +57,8 @@ def main():
         
     first = True
 >>>>>>> 4b3c9bf (update client)
+=======
+>>>>>>> 76a8396 (update client)
 
     while not auth:
         username = input("username: ")

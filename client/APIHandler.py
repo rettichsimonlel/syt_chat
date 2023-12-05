@@ -9,7 +9,15 @@ class APIHandler:
         self.host = host
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.token = None
+=======
+        self.Token = None
+=======
+<<<<<<< HEAD
+        self.token = None
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)
 
     def getPost(self, link, json, files=None):
         if files is None:
@@ -18,9 +26,12 @@ class APIHandler:
 =======
         self.Token = None
 >>>>>>> 66400b8 (update client)
+<<<<<<< HEAD
 =======
         self.Token = None
 >>>>>>> 4b3c9bf (update client)
+=======
+>>>>>>> 76a8396 (update client)
 
     def login(self, credentials: List[str]):
         self.username = credentials[0]
@@ -59,12 +70,22 @@ class APIHandler:
         
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         
 >>>>>>> 66400b8 (update client)
 =======
         
 >>>>>>> 4b3c9bf (update client)
+=======
+        
+=======
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 66400b8 (update client)
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)
     def getUserId(self, username=None):
         setUserId = False
         if username is None:
@@ -97,11 +118,21 @@ class APIHandler:
                 "token": self.token,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 4b3c9bf (update client)
                 "sender_id": self.userid,
 >>>>>>> 66400b8 (update client)
+=======
+                "sender_id": self.userid,
+=======
+<<<<<<< HEAD
+=======
+                "sender_id": self.userid,
+>>>>>>> 66400b8 (update client)
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)
                 "receiver_id": receiver_id,
                 "msg": message
                 }
@@ -113,11 +144,21 @@ class APIHandler:
                 "token": self.token,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 4b3c9bf (update client)
                 "user_id": self.userid
 >>>>>>> 66400b8 (update client)
+=======
+                "user_id": self.userid
+=======
+<<<<<<< HEAD
+=======
+                "user_id": self.userid
+>>>>>>> 66400b8 (update client)
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)
                 }
 
         data = requests.get(self.host+"/get_msg_usr/", json=request).json()
@@ -125,6 +166,12 @@ class APIHandler:
 
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)
     def addUser(self):
         request = {
             "token": self.token,
@@ -135,7 +182,14 @@ class APIHandler:
         return requests.post(self.host+"/add_user/", json=request)
 
 
+<<<<<<< HEAD
 >>>>>>> 66400b8 (update client)
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 66400b8 (update client)
+>>>>>>> 554cb49 (update client)
+>>>>>>> 76a8396 (update client)
     def getUsers(self):
         response = requests.get(self.host+"/get_usrs/").json()["messages"]
 
