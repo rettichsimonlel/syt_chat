@@ -1,2 +1,3 @@
 npyscreen
 requests
+python-multipart
