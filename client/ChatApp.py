@@ -7,9 +7,11 @@ from time import sleep
 
 
 class ChatApp(npyscreen.NPSApp):
-    def __init__(self, appname, on_press) -> None:
+    def __init__(self, appname, on_press, actions) -> None:
         self.appname = appname
         self.to_call = on_press
+        self.actions = actions
+
         self.form_running = False
 
     def set_app_name(self, appname):
@@ -51,18 +53,27 @@ class ChatApp(npyscreen.NPSApp):
         self.read_box.display()
         self.F.display()
 
+    def handle_action(self, key_value_pair):
+        [key, value] = key_value_pair
+        to_call = self.actions[key]
+        to_call(value)
+
     def on_press(self, widget):
         if self.write_box.value == "":
             return
         message = ""
         message = self.write_box.value
+
         self.write_box.value = ""
         self.write_box.edit_cell = (-10, 0)
         self.write_box.update
-        self.F.display()
-        self.to_call(message)
 
-def update(app):
-    sleep(3)
-    app.set_read_box("new Text")
-    
+        # Handle special commands like put, get
+        self.running = False
+        if ":" in message and message.split(":")[0] in self.actions:
+            self.handle_action(message.split(":"))
+        else:
+            self.to_call(message)
+
+        # Refresh the display of the Form
+        self.F.display()
