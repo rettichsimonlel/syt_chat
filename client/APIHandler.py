@@ -7,7 +7,7 @@ from typing import List
 class APIHandler:
     def __init__(self, host) -> None:
         self.host = host
-        self.Token = None
+        self.token = None
 
     def getPost(self, link, json, files=None):
         if files is None:
@@ -49,7 +49,6 @@ class APIHandler:
 
         response = requests.post(self.host+"/post_file/", request, files=files)
         
-        
     def getUserId(self, username=None):
         setUserId = False
         if username is None:
@@ -80,7 +79,6 @@ class APIHandler:
             receiver_id = self.receiver
         request = {
                 "token": self.token,
-                "sender_id": self.userid,
                 "receiver_id": receiver_id,
                 "msg": message
                 }
@@ -90,21 +88,10 @@ class APIHandler:
     def getMessages(self):
         request = {
                 "token": self.token,
-                "user_id": self.userid
                 }
 
         data = requests.get(self.host+"/get_msg_usr/", json=request).json()
         return data["messages"]
-
-    def addUser(self):
-        request = {
-            "token": self.token,
-            "username": self.username,
-            "password": self.password,
-        }
-
-        return requests.post(self.host+"/add_user/", json=request)
-
 
     def getUsers(self):
         response = requests.get(self.host+"/get_usrs/").json()["messages"]
@@ -138,4 +125,3 @@ class APIHandler:
 
         with open(f"static/{args}", "wb") as f:
            f.write(response) 
-

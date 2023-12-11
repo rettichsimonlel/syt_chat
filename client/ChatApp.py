@@ -11,6 +11,7 @@ class ChatApp(npyscreen.NPSApp):
         self.appname = appname
         self.to_call = on_press
         self.actions = actions
+
         self.form_running = False
 
     def set_app_name(self, appname):
@@ -25,6 +26,7 @@ class ChatApp(npyscreen.NPSApp):
                               max_height=-11,
                               rely=1)
         
+
         self.F.add(npyscreen.MultiLineEdit,
               value=f"{8*'-'}\nMessage:\n{8*'-'}",
               editable=False,
@@ -75,4 +77,3 @@ class ChatApp(npyscreen.NPSApp):
 
         # Refresh the display of the Form
         self.F.display()
-

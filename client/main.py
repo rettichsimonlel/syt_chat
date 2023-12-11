@@ -15,6 +15,7 @@ def main():
     user_id = apihandler.getUserId()
 
     first = True
+
     user_input = ""
     while user_input != "q" and first:
         fancy_users = []
