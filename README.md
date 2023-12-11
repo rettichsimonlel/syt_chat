@@ -55,12 +55,12 @@ Key inputs:
 
 <tr>
 <td class="org-left">get:$FILENAME</td>
-<td class="org-left">download the uploaded file to $PATH<sub>TO</sub><sub>CLIENT</sub>/static/$FILENAME</td>
+<td class="org-left">download the uploaded file to $PATH_TO_CLIENT/static/$FILENAME</td>
 </tr>
 
 
 <tr>
-<td class="org-left">put:$FILE<sub>PATH</sub></td>
+<td class="org-left">put:$FILEPATH</td>
 <td class="org-left">upload a file using an absolute path</td>
 </tr>
 
