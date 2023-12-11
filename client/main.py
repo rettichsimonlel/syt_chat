@@ -3,10 +3,36 @@ from getpass import getpass
 from time import sleep
 from ChatApp import ChatApp
 
+import os
 import threading
 
+global toggleUpdate
+toggleUpdate = True
+global apihandler
+apihander = None
+global app
+app = None
 
-def update(apihandler, app, receiver, sender, running):
+def handleClear(args):
+    global toggleUpdate
+    toggleUpdate = True
+
+def handleGet(args):
+    global app
+    global toggleUpdate
+    global apihandler
+
+    if args == "":
+        response = apihandler.getFileList()
+        toggleUpdate = False
+
+        app.set_read_box("\n".join(response))
+    else:
+        response = apihandler.getFile(args, f"static/{args}")
+
+def update(apihandler, receiver, sender, running):
+    global toggleUpdate
+    global app
     sleep(1)
     while running[0]:
         messages = apihandler.getMessages()
@@ -28,11 +54,13 @@ def update(apihandler, app, receiver, sender, running):
         text = text[-35:]
         text = "\n".join(text)
 
-        if running[0]:
+        if running[0] and toggleUpdate:
             app.set_read_box(text)
         sleep(1)
 
 def main():
+    global apihandler
+    global app
     auth = False
     apihandler = APIHandler("http://172.31.180.136:8000")
 #    apihandler = APIHandler("http://localhost:8000")
@@ -71,29 +99,32 @@ def main():
 
             apihandler.setReceiver(receiver)
 
-            run_app(apihandler, user_id, receiver, first, appname)
+            run_app(user_id, receiver, first, appname)
             first = False
 
-def run_app(apihandler, user_id, receiver, first, appname):
+def run_app(user_id, receiver, first, appname):
+    global apihandler
+    global app
     running = [False]
 
     ACTIONS = {
         "put": apihandler.postFile,
-#        "get": App.getFile,
+        "get": handleGet,
+        "clear": handleClear,
     }
 
-    App = ChatApp(appname, apihandler.addMessage, ACTIONS)
+    app = ChatApp(appname, apihandler.addMessage, ACTIONS)
 
 
-    update_thread = threading.Thread(target=update, kwargs={"apihandler": apihandler, "receiver": receiver, "app": App, "sender": user_id, "running": running})
+    update_thread = threading.Thread(target=update, kwargs={"apihandler": apihandler, "receiver": receiver, "sender": user_id, "running": running})
     update_thread.start()
 
     running[0] = True
 
     if first:
-        App.run()
+        app.run()
     else:
-        App.main()
+        app.main()
 
     running[0] = False
 

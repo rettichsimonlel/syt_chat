@@ -9,6 +9,11 @@ class APIHandler:
         self.host = host
         self.Token = None
 
+    def getPost(self, link, json, files=None):
+        if files is None:
+            return requests.post(self.host+link, json=json)
+        return requests.post(self.host+link, json=json, files=files)
+
     def login(self, credentials: List[str]):
         self.username = credentials[0]
         self.password = credentials[1]
@@ -107,19 +112,30 @@ class APIHandler:
         return response
 
     def getFileList(self):
-        ...
         request = {
             "token": self.token,
-            "user_id": self.receiver
+            "receiver": self.receiver
         }
 
-        return request.post(self.host+"", json=request)
+        response = self.getPost("/get_file_list/", request).json()["messages"]
+        return(response)
 
-    def getFile(self, file_name):
-        ...
+    def getFile(self, args, filepath):
+        if args == "":
+            return self.getFileList()
         request = {
             "token": self.token,
-            "file_name": file_name
+            "filename": args,
         }
 
-        return request.post(self.host+"", json=request)
+        response = requests.post(self.host+"/get_file/", json=request).content
+
+        if not os.path.exists("static"):
+            os.mkdir("static")
+        path = os.path.split(args)
+        if not os.path.exists(f"static/{path[-2]}"):
+            os.mkdir(f"static/{path[-2]}")
+
+        with open(f"static/{args}", "wb") as f:
+           f.write(response) 
+
