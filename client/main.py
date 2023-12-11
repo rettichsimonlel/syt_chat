@@ -34,7 +34,7 @@ def update(apihandler, app, receiver, sender, running):
 
 def main():
     auth = False
-    apihandler = APIHandler("http://172.31.180.14:8000")
+    apihandler = APIHandler("http://172.31.180.136:8000")
 #    apihandler = APIHandler("http://localhost:8000")
 
     while not auth:

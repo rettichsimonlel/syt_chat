@@ -106,3 +106,20 @@ class APIHandler:
 
         return response
 
+    def getFileList(self):
+        ...
+        request = {
+            "token": self.token,
+            "user_id": self.receiver
+        }
+
+        return request.post(self.host+"", json=request)
+
+    def getFile(self, file_name):
+        ...
+        request = {
+            "token": self.token,
+            "file_name": file_name
+        }
+
+        return request.post(self.host+"", json=request)
