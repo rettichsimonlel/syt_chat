@@ -12,13 +12,14 @@ def create():
     cursor.execute('DROP TABLE IF EXISTS user')
     cursor.execute('DROP TABLE IF EXISTS message')
     cursor.execute('DROP TABLE IF EXISTS msg')
+    cursor.execute('DROP TABLE IF EXISTS file')
 
     # Create the 'user' table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL
+            password BLOB NOT NULL
         )
     ''')
 
@@ -32,6 +33,17 @@ def create():
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (sender) REFERENCES user (id),
             FOREIGN KEY (receiver) REFERENCES user (id)
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS file (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            receiver INTEGER NOT NULL,
+            sender INTEGER NOT NULL,
+            filepath TEXT NOT NULL,
+            FOREIGN KEY (receiver) REFERENCES user (id)
+            FOREIGN KEY (sender) REFERENCES user (id)
         )
     ''')
 
